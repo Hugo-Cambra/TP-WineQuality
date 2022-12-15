@@ -10,6 +10,22 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from pandas import json_normalize
 
+def get_train_data(data_frame):
+    #Now seperate the dataset as response variable and feature variabes
+    X = data_frame.drop('quality', axis = 1)
+    y = data_frame['quality']
+
+    #Train and Test splitting of data 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+    #Applying Standard scaling to get optimized result
+    sc = StandardScaler()
+
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.fit_transform(X_test)
+    
+    return X_train, X_test, y_train, y_test
+
 def post_retrain(data_frame):
     #Now seperate the dataset as response variable and feature variabes
     X = data_frame.drop('quality', axis = 1)
@@ -24,23 +40,13 @@ def post_retrain(data_frame):
     X_train = sc.fit_transform(X_train)
     X_test = sc.fit_transform(X_test)
     
-
-def post_predict(data_frame, new_wine):
-    #Now seperate the dataset as response variable and feature variabes
-    X = data_frame.drop('quality', axis = 1)
-    y = data_frame['quality']
-
-    #Train and Test splitting of data 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-
-    #Applying Standard scaling to get optimized result
-    sc = StandardScaler()
-
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.fit_transform(X_test)
-
     rfc = RandomForestClassifier(n_estimators=300)
     rfc.fit(X_train, y_train)
+    get_model(rfc)
+
+def post_predict(new_wine):
+    rfc= pickle.load(open('model.pkl', 'rb'))
+
     pred_rfc = rfc.predict(new_wine)
     
     # print(get_description(rfc,y_test,X_test)[2])
