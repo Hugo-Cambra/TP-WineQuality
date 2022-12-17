@@ -18,7 +18,9 @@ def get_data_frame():
 
     return data_frame
 
-def get_train_test_data(data_frame):
+def get_train_test_data():
+    data_frame = get_data_frame()
+    
     #Now seperate the dataset as response variable and feature variabes
     X = data_frame.drop('quality', axis = 1)
     y = data_frame['quality']
@@ -35,7 +37,7 @@ def get_train_test_data(data_frame):
     return X_train, X_test, y_train, y_test
 
 def post_retrain(X_train, y_train):
-    train_test_data = get_train_test_data(get_data_frame())
+    train_test_data = get_train_test_data()
     
     X_train = train_test_data[0]
     y_train = train_test_data[2]
@@ -99,7 +101,7 @@ to_predict_new_wine = json_normalize(new_wine)
 
 data_frame = get_data_frame()
 
-train_test_data = get_train_test_data(data_frame)
+train_test_data = get_train_test_data()
 
 X_train = train_test_data[0]
 X_test = train_test_data[1]
