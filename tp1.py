@@ -10,7 +10,15 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
 from pandas import json_normalize
 
-def get_train_data(data_frame):
+def get_data_frame():
+    data_frame = pd.read_csv("Wines.csv")
+
+    data_frame = data_frame.drop(columns=['Id'])
+    data_frame.columns = ['fixedAcidity', 'volatileAcidity', 'citricAcid', 'residualSugar', 'chlorides', 'freeSulfurDioxide', 'totalSulfurDioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality']
+
+    return data_frame
+
+def get_train_test_data(data_frame):
     #Now seperate the dataset as response variable and feature variabes
     X = data_frame.drop('quality', axis = 1)
     y = data_frame['quality']
@@ -26,19 +34,11 @@ def get_train_data(data_frame):
     
     return X_train, X_test, y_train, y_test
 
-def post_retrain(data_frame):
-    #Now seperate the dataset as response variable and feature variabes
-    X = data_frame.drop('quality', axis = 1)
-    y = data_frame['quality']
-
-    #Train and Test splitting of data 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-
-    #Applying Standard scaling to get optimized result
-    sc = StandardScaler()
-
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.fit_transform(X_test)
+def post_retrain(X_train, y_train):
+    train_test_data = get_train_test_data(get_data_frame())
+    
+    X_train = train_test_data[0]
+    y_train = train_test_data[2]
     
     rfc = RandomForestClassifier(n_estimators=300)
     rfc.fit(X_train, y_train)
@@ -48,9 +48,9 @@ def post_predict(new_wine):
     rfc= pickle.load(open('model.pkl', 'rb'))
 
     pred_rfc = rfc.predict(new_wine)
-    
-    # print(get_description(rfc,y_test,X_test)[2])
-    print(pred_rfc[0])
+
+    # print(pred_rfc[0])
+    return pred_rfc[0]
 
 def get_model(model):
     pickle.dump(model, open('model.pkl', 'wb'))
@@ -68,11 +68,6 @@ def put_model(data_frame, add_wine):
     new_data_frame = data_frame.append(add_wine, ignore_index=True)
     new_data_frame.to_csv('WineTest.csv', index=False)
     # return new_data_frame
-
-data_frame = pd.read_csv("Wines.csv")
-
-data_frame = data_frame.drop(columns=['Id'])
-data_frame.columns = ['fixedAcidity', 'volatileAcidity', 'citricAcid', 'residualSugar', 'chlorides', 'freeSulfurDioxide', 'totalSulfurDioxide', 'density', 'pH', 'sulphates', 'alcohol', 'quality']
 
 new_wine = {'fixedAcidity' : 7.4,
     'volatileAcidity' : 0.7,
@@ -102,31 +97,22 @@ add_wine = {'fixedAcidity' : 7.4,
 
 to_predict_new_wine = json_normalize(new_wine)
 
-#Now seperate the dataset as response variable and feature variabes
-# X = wine.drop('quality', axis = 1)
-# y = wine['quality']
+data_frame = get_data_frame()
 
-# #Train and Test splitting of data 
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+train_test_data = get_train_test_data(data_frame)
 
-# #Applying Standard scaling to get optimized result
-# sc = StandardScaler()
+X_train = train_test_data[0]
+X_test = train_test_data[1]
+y_train = train_test_data[2]
+y_test = train_test_data[3]
 
-# X_train = sc.fit_transform(X_train)
-# X_test = sc.fit_transform(X_test)
+post_retrain(X_train, y_train)
 
-# rfc = RandomForestClassifier(n_estimators=300)
-# rfc.fit(X_train, y_train)
-# pred_rfc = rfc.predict(X_test)
-
-# accuracy_score(y_test,pred_rfc)
-
-# print(classification_report(y_test, pred_rfc))
-
-post_predict(data_frame, to_predict_new_wine)
+prediction = post_predict(to_predict_new_wine)
+print(prediction)
 
 # put_model(data_frame, add_wine)
 
 # get_model(rfc)
 
-load_model = pickle.load(open('model.pkl', 'rb'))
+# load_model = pickle.load(open('model.pkl', 'rb'))
