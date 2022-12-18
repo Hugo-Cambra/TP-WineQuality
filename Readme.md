@@ -26,5 +26,5 @@ on trie le tableau par ordre décroissant de qualité puis on fait une moyenne d
 
 
 # Contributors : 
- Hugo Cambra Lefeuvre : cambralefe@cy-tech.fr
- Titouan Riot : riottitoua@cy-tech.fr
+ - Hugo Cambra Lefeuvre : cambralefe@cy-tech.fr
+ - Titouan Riot : riottitoua@cy-tech.fr
