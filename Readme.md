@@ -1,4 +1,4 @@
-### About this file
+
 
 Ce dataframe contient les colonnes suivantes :
 
@@ -17,3 +17,14 @@ Input variables (based on physicochemical tests):
 
 Output variable (based on sensory data):
 - quality | Qualité générale : note comprise en 0 et 10
+
+randomForest car donnait la meilleure précision avec nos données 
+on a choisi de séparer les données en 80% de train 20% de test
+
+Pour recupere le vin parfait :  
+on trie le tableau par ordre décroissant de qualité puis on fait une moyenne des valeurs pour estimer le meilleur vin 
+
+
+# Contributors : 
+ Hugo Cambra Lefeuvre : cambralefe@cy-tech.fr
+ Titouan Riot : riottitoua@cy-tech.fr
