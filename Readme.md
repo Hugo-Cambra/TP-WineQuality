@@ -19,6 +19,9 @@ Input variables (based on physicochemical tests):
 Output variable (based on sensory data):
 - quality | Qualité générale : note comprise en 0 et 10
 
+# Au sujet du modèle 
+Pour tester avec votre propre modèle entrainé, il faut qu'il s'appelle 'model.pkl'
+
 # Choix effectués 
 Pour réaliser le modèle nous avons choisi randomForest car cela donnait la meilleure précision avec nos données. 
 Puis, on a choisi de séparer les données en 80% de train 20% de test.
@@ -28,5 +31,5 @@ on trie le tableau par ordre décroissant de qualité puis on fait une moyenne d
 
 
 # Contributeurs : 
- - Hugo Cambra Lefeuvre : cambralefe@cy-tech.fr
+ - Hugo Cambra Lefebvre : cambralefe@cy-tech.fr
  - Titouan Riot : riottitoua@cy-tech.fr
